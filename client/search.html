@@ -1,0 +1,195 @@
+<html>
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+<script>
+
+    let searchData;
+
+    async function getDataFromServer() {
+
+
+        const params = new URLSearchParams(window.location.search)
+        searchData = params.get("q");
+
+        let user = JSON.parse(window.localStorage.getItem('user'));
+
+
+        let username = document.getElementById('username')
+
+        username.innerText = "User :" + " " + user.name
+
+
+        let resp = await fetch("http://localhost:8000/api/employees?name=" + searchData);
+        let employees = await resp.json();
+        let body = document.getElementById("tBody");
+
+
+
+        employees.forEach(employee => {
+
+            let tdfName = document.createElement("td");
+
+            tdfName.innerHTML = employee.firstname
+
+
+            let tdlname = document.createElement("td");
+
+            tdlname.innerHTML = employee.lastname
+
+
+            let tdstartwork = document.createElement("td");
+
+            tdstartwork.innerHTML = employee.startwork
+
+
+            let tddep = document.createElement("td")
+
+            tddep.innerHTML = employee.department
+
+
+
+            let tdshifts = document.createElement("td")
+
+            let ulObj = document.createElement("ul")
+
+
+            employee.shifts.forEach(x => {
+
+                let liObj = document.createElement("li");
+                liObj.innerHTML = ` date: ${x}`
+
+                ulObj.appendChild(liObj)
+
+            })
+
+            tdshifts.appendChild(ulObj)
+
+
+
+            let tdedit = document.createElement("td")
+            let editLink = document.createElement('a')
+
+            editLink.href = "editemployee.html?empid=" + employee._id
+            editLink.innerHTML = "edit"
+
+
+            tdedit.appendChild(editLink)
+
+
+
+
+            let tdshift = document.createElement("td")
+            let shiftLink = document.createElement('a')
+
+            shiftLink.href = "addshift.html?empid=" + employee._id
+            shiftLink.innerHTML = "add shift"
+
+
+            tdshift.appendChild(shiftLink)
+
+
+            let trObj = document.createElement("tr");
+
+
+            trObj.appendChild(tdfName);
+            trObj.appendChild(tdlname);
+            trObj.appendChild(tdstartwork);
+            trObj.appendChild(tddep)
+            trObj.appendChild(tdshifts);
+            trObj.appendChild(tdshifts);
+            trObj.appendChild(tdedit)
+            trObj.appendChild(tdshift)
+
+
+            body.appendChild(trObj);
+
+        })
+    }
+
+
+    function Logout() {
+
+        window.location.href = "login.html"
+    }
+
+
+    function back() {
+
+        window.location.href = "employee.html"
+
+    }
+
+</script>
+
+<body onload="getDataFromServer()">
+
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">FirstProject</a>
+
+
+            <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+
+            </ul>
+
+            <a class="navbar-brand" id="credit"></a>
+            <a class="navbar-brand" id="username"></a>
+            <button class="btn btn-outline-success" onclick="Logout()">Logout</button>
+        </div>
+    </nav>
+
+
+
+    <br /><br /><br />
+    <div class="container">
+
+
+        <h1 class="text-center">Search Result</h1>
+
+
+
+
+        <br /> <br />
+
+
+        <table class="table table-striped  table-bordered text-center">
+            <thead>
+                <tr>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Started Work</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Shifts</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Add Shift</th>
+
+
+                </tr>
+            </thead>
+            <tbody id="tBody">
+
+            </tbody>
+        </table>
+
+        <button class="btn btn-primary mb-5" onclick="back()">Back</button>
+
+
+    </div>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>

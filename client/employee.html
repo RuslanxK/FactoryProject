@@ -1,0 +1,207 @@
+<html>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+<link rel="stylesheet" href="style.css">
+<script>
+
+
+
+  async function getDataFromServer() {
+
+
+    let user = JSON.parse(window.localStorage.getItem('user'));
+
+    let username = document.getElementById('username')
+
+    username.innerText = "User :" + " " + user.name
+
+
+
+    let resp = await fetch("http://localhost:8000/api/employees");
+    let employees = await resp.json();
+    let body = document.getElementById("tBody");
+
+
+
+    employees.forEach(employee => {
+
+      let tdfName = document.createElement("td");
+
+      tdfName.innerHTML = employee.firstname
+
+
+      let tdlname = document.createElement("td");
+
+      tdlname.innerHTML = employee.lastname
+
+
+      let tdstartwork = document.createElement("td");
+
+      tdstartwork.innerHTML = employee.startwork
+
+
+      let tddep = document.createElement("td")
+
+      tddep.innerHTML = employee.department
+
+
+
+      let tdshifts = document.createElement("td")
+
+      let ulObj = document.createElement("ul")
+
+
+
+      let liObj = document.createElement("li");
+
+
+
+      employee.shifts.forEach(x => {
+
+        let liObj = document.createElement("li");
+        liObj.innerHTML = ` date: ${x}`
+
+        ulObj.appendChild(liObj)
+
+      })
+
+
+      tdshifts.appendChild(ulObj)
+
+      let tdedit = document.createElement("td")
+      let editLink = document.createElement('a')
+
+      editLink.href = "editemployee.html?empid=" + employee._id
+      editLink.innerHTML = "edit"
+
+
+      tdedit.appendChild(editLink)
+
+
+
+
+      let trObj = document.createElement("tr");
+
+
+      trObj.appendChild(tdfName);
+      trObj.appendChild(tdlname);
+      trObj.appendChild(tdstartwork);
+      trObj.appendChild(tddep)
+      trObj.appendChild(tdshifts);
+      trObj.appendChild(tdedit)
+
+
+      body.appendChild(trObj);
+
+    })
+  }
+
+
+  function Logout() {
+
+    window.location.href = "login.html"
+  }
+
+
+  function addEmployee() {
+    document.location.href = "newemployee.html"
+  }
+
+
+  function home() {
+
+    document.location.href = "homepage.html"
+  }
+
+</script>
+
+<body onload="getDataFromServer()">
+
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">FirstProject</a>
+
+
+      <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+
+      </ul>
+
+      <a class="navbar-brand" id="credit"></a>
+      <a class="navbar-brand" id="username"></a>
+      <button class="btn btn-outline-success" onclick="Logout()">Logout</button>
+    </div>
+  </nav>
+
+
+
+  <br /><br /><br />
+  <div class="container">
+
+
+    <h1 class="">Employees</h1>
+
+    <div class="col-12 justify-content-center">
+
+      <div class="row d-flex justify-content-end">
+
+        <div class="col-6">
+
+          <div class="row">
+
+
+            <form class="d-flex" action="search.html" method="get">
+              <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search">
+              <button class="btn btn-primary" value="search">Search</button>
+            </form>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+
+      <br /> <br />
+
+
+      <table class="table table-striped  table-bordered text-center">
+        <thead>
+          <tr>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Started Work</th>
+            <th scope="col">Department</th>
+            <th scope="col">Shifts</th>
+            <th scope="col">Edit / Add Shift / Delete</th>
+
+
+          </tr>
+        </thead>
+        <tbody id="tBody">
+
+        </tbody>
+      </table>
+
+      <button class="btn btn-primary mb-5" onclick="home()">Back</button>
+      <button class="btn btn-success mb-5" onclick="addEmployee()">Add Employee</button>
+
+
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+      integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+      integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+      crossorigin="anonymous"></script>
+
+</body>
+
+</html>
